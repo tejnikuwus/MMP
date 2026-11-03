@@ -1,0 +1,26 @@
+# ROS 2 build directories
+build/
+install/
+log/
+src/build/
+src/install/
+src/log/
+
+# Python cache & artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+
+# Editor and OS files
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# Backup and socket files
+*.bak
+.lgd-nfy0
