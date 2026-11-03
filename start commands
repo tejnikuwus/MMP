@@ -1,0 +1,44 @@
+cd ~/ros2_ws
+colcon build --packages-select servo_controller
+source install/setup.bash
+ros2 run servo_controller servo_node
+
+
+
+
+sudo chmod 666 /dev/ttyUSB0
+ls -l /dev/ttyUSB*
+source ~/ros2_ws/install/setup.bash
+ros2 launch sllidar_ros2 sllidar_c1_launch.py serial_port:=/dev/ttyUSB0
+
+ros2 launch foxglove_bridge foxglove_bridge_launch.xml
+
+ros2 run tf2_ros static_transform_publisher --x 0 --y 0 --z 0 --yaw 0 --pitch 0 --roll 0 --frame-id odom --child-frame-id base_link
+
+ros2 run tf2_ros static_transform_publisher --x 0 --y 0 --z 0 --yaw 0 --pitch 0 --roll 0 --frame-id base_link --child-frame-id laser
+
+ros2 launch slam_toolbox online_async_launch.py slam_params_file:=/home/tej/ros2_ws/slam_rarams.yaml use_sim_time:=false
+
+ros2 run tf2_ros static_transform_publisher --frame-id odom --child-frame-id base_link
+ros2 run tf2_ros static_transform_publisher --x 0 --y 0 --z 0.05 --frame-id base_link --child-frame-id laser
+
+
+
+
+ros2 launch foxglove_bridge foxglove_bridge_launch.xml
+
+source ~/ros2_ws/install/setup.bash
+ros2 launch sllidar_ros2 sllidar_c1_launch.py
+
+ros2 run tf2_ros static_transform_publisher --x 0 --y 0 --z 0 --yaw 0 --pitch 0 --roll 0 --frame-id odom --child-frame-id base_link
+
+ros2 run tf2_ros static_transform_publisher --x 0 --y 0 --z 0 --yaw 0 --pitch 0 --roll 0 --frame-id base_link --child-frame-id laser
+
+ros2 launch slam_toolbox online_async_launch.py slam_params_file:=/home/tej/ros2_ws/slam_params.yaml use_sim_time:=false
+
+python3 joy_to_led.py
+
+ros2 launch nav2_bringup navigation_launch.py params_file:=$HOME/ros2_ws/nav2_params.yaml use_sim_time:=false use_collision_monitor:=false
+
+source ~/ros2_ws/install/setup.bash
+ros2 run micro_ros_agent micro_ros_agent serial --dev /dev/ttyACM0 -b 115200
